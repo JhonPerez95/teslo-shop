@@ -42,6 +42,11 @@ export class Product {
   @Column({ type: 'text' })
   gender: string;
 
+  @Column('text', {
+    array: true,
+    default: [],
+  })
+  tags: string[];
   // Validations
   @BeforeInsert()
   checkSlugInsert() {
