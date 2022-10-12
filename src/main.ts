@@ -12,7 +12,9 @@ async function bootstrap() {
   );
   app.setGlobalPrefix('api/');
 
-  await app.listen(3000);
-  console.log(`Application is running on: ${await app.getUrl()}`);
+  const port = 3000;
+  const result = await app.listen(3000);
+  console.log()
+  console.log(`Application is running on: http://localhost:${port}`);
 }
 bootstrap();
