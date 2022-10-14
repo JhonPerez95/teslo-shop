@@ -5,16 +5,19 @@
 # Teslo API
 
 1. Clonar proyecto
-2. Instalacion paquetes
+2. `npm install`
+3. Clonar el archivo `.env.template` y renombrarlo a `.env`
+4. Cambiar las variables de entorno
+5. Levantar la base de datos
 
-```bash
-npm install
 ```
-
-3. Clonar archivo **.env.template**
-
-### Levantar la db
-
-```bash
 docker-compose up -d
 ```
+
+6. Ejecutar SEED
+
+```
+http://localhost:3000/api/seed
+```
+
+7. Levantar: `npm start:dev`
