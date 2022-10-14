@@ -112,6 +112,7 @@ export class ProductsService {
   async remove(id: string) {
     const product = await this.findOne(id);
     this.productsRepository.remove(product);
+    return { statusCode: 200, msg: 'delete succesfull !' };
   }
 
   // Methos common
@@ -132,5 +133,14 @@ export class ProductsService {
       ...rest,
       images: images.map((item) => item.url),
     };
+  }
+
+  async deleteAllProducts() {
+    const query = this.productsRepository.createQueryBuilder('product');
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      this.handlerExceptionsDB(error);
+    }
   }
 }
