@@ -5,6 +5,8 @@ export const fileFilter = (
   file: Express.Multer.File,
   callback: Function,
 ): void => {
+
+
   if (!file) return callback(new Error('File is empty'), false);
 
   const fileExtension = file.mimetype.split('/').pop();
@@ -12,5 +14,5 @@ export const fileFilter = (
   if (!validExtension.includes(fileExtension))
     return callback(new Error('Extension not allowed'), false);
 
-  callback(null, false);
+  callback(null, true);
 };
