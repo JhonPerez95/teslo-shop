@@ -10,11 +10,11 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.setGlobalPrefix('api/');
+  app.setGlobalPrefix('api');
 
   const port = 3000;
-  const result = await app.listen(3000);
-  console.log()
+   await app.listen(port);
+
   console.log(`Application is running on: http://localhost:${port}`);
 }
 bootstrap();

@@ -1,18 +1,22 @@
+import { join } from 'path';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { existsSync } from 'fs';
 
 @Injectable()
 export class FilesService {
   async uploadProductImage(file: Express.Multer.File) {
-
     if (!file) {
       throw new BadRequestException('File not found adas');
     }
 
+    return file;
+  }
 
-    return {
-      statusCode: 200,
-      message: 'Route uploaded successfully',
-      data: file,
-    };
+  getInfoImage(imageName: string) {
+    const path = join(__dirname, '../../static/uploads/', imageName);
+    if (!existsSync(path)) {
+      throw new BadRequestException('No product image found');
+    }
+    return path;
   }
 }
