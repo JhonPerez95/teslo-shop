@@ -35,7 +35,7 @@ export class FilesController {
       fileFilter: fileFilter,
       //       limits: { fileSize: 1000 },
       storage: diskStorage({
-        destination: './public/uploads',
+        destination: './static/products',
         filename: fileNamer,
       }),
     }),
@@ -43,7 +43,7 @@ export class FilesController {
   async uploadProductImage(@UploadedFile() file: Express.Multer.File) {
     const image = await this.filesService.uploadProductImage(file);
 
-    const secureUrl = `${this.configService.get('HOST_API')}/uploads/${
+    const secureUrl = `${this.configService.get('HOST_API')}/static/products/${
       image.filename
     }`;
     return { secureUrl };
