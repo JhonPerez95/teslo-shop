@@ -7,6 +7,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/';
 import { User } from './entities/user.entity';
 
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly _userRepository: Repository<User>,
+    private _jwtService: JwtService,
   ) {}
 
   async create(createAuthDto: CreateUserDto) {

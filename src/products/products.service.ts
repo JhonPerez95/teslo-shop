@@ -136,7 +136,7 @@ export class ProductsService {
   }
 
   async deleteAllProducts() {
-    const query =  this.productsRepository.createQueryBuilder('product');
+    const query = this.productsRepository.createQueryBuilder('product');
     try {
       return await query.delete().where({}).execute();
     } catch (error) {
