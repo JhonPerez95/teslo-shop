@@ -10,6 +10,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/';
 import { User } from './entities/user.entity';
+import { JwtPayloadInterface } from './interfaces';
 
 @Injectable()
 export class AuthService {
@@ -28,9 +29,10 @@ export class AuthService {
         password: bcrypt.hashSync(password, 10),
       });
       await this._userRepository.save(userDb);
+      delete userDb.password;
+      const token = this._generateJWT({ email: userDb.email });
 
-      // TODO: retornar JWT access token
-      return userDb;
+      return { userDb, token };
     } catch (error) {
       this._handleDbErrors(error);
     }
@@ -55,11 +57,7 @@ export class AuthService {
     if (!bcrypt.compareSync(password, userDb.password))
       throw new UnauthorizedException('Credentials are not valid (password)');
 
-    const token = this._jwtService.sign({
-      user: userDb.email,
-      rol: userDb.roles,
-    });
-    // TODO: retornar JWT access token
+    const token = this._generateJWT({ email: userDb.email });
     return { token };
   }
 
@@ -84,8 +82,11 @@ export class AuthService {
     if (error.code === '23505') {
       throw new BadRequestException(error.detail);
     }
-
     console.log(error);
     throw new InternalServerErrorException('Comunication with the admin!');
+  }
+
+  private _generateJWT(payload: JwtPayloadInterface): string {
+    return this._jwtService.sign(payload);
   }
 }
