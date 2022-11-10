@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +19,12 @@ export class AuthService {
 
   async create(createAuthDto: CreateUserDto) {
     try {
-      const userDb = this._userRepository.create(createAuthDto);
+      const { password, ...resUserDto } = createAuthDto;
+
+      const userDb = this._userRepository.create({
+        ...resUserDto,
+        password: bcrypt.hashSync(password, 10),
+      });
       await this._userRepository.save(userDb);
       return userDb;
     } catch (error) {
@@ -43,7 +49,7 @@ export class AuthService {
   }
 
   // Private
-  private _handleDbErrors(error: any) {
+  private _handleDbErrors(error: any): never {
     if (error.code === '23505') {
       throw new BadRequestException(error.detail);
     }
