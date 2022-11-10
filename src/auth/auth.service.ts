@@ -26,6 +26,9 @@ export class AuthService {
         password: bcrypt.hashSync(password, 10),
       });
       await this._userRepository.save(userDb);
+      delete userDb.password;
+
+      // TODO: retornar JWT access token
       return userDb;
     } catch (error) {
       this._handleDbErrors(error);
