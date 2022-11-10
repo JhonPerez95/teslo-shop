@@ -13,6 +13,7 @@ export class User {
 
   @Column({
     type: 'text',
+    select: false,
   })
   password: string;
 
@@ -34,4 +35,3 @@ export class User {
   })
   roles: string[];
 }
- 
