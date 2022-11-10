@@ -45,6 +45,7 @@ export class AuthService {
       select: {
         email: true,
         password: true,
+        roles: true,
       },
     });
 
@@ -54,8 +55,12 @@ export class AuthService {
     if (!bcrypt.compareSync(password, userDb.password))
       throw new UnauthorizedException('Credentials are not valid (password)');
 
+    const token = this._jwtService.sign({
+      user: userDb.email,
+      rol: userDb.roles,
+    });
     // TODO: retornar JWT access token
-    return userDb;
+    return { token };
   }
 
   findAll() {
