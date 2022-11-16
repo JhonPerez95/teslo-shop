@@ -10,5 +10,18 @@ export const GetUser = createParamDecorator((data, ctx: ExecutionContext) => {
 
   if (!user)
     throw new InternalServerErrorException('User no found in request!');
+
+  if (Array.isArray(data)) {
+    let userDat = {};
+    data.forEach((item) => {
+      userDat[item] = user[item];
+    });
+    return userDat;
+  }
+
+  if (data) {
+    return user[data];
+  }
+
   return user;
 });

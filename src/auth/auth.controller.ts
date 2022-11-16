@@ -31,17 +31,19 @@ export class AuthController {
   }
 
   @Get()
-    @UseGuards(AuthGuard())
+  @UseGuards(AuthGuard())
   testing(
-    // @Req() request: Request
-    @GetUser() user: User
+    @Req() request: Request,
+    @GetUser() user: User,
+    @GetUser(['email', 'fullName']) userEmail: User,
   ) {
-
-    // const user= request.user
+   
+    console.log(request.rawHeaders);
     return {
       ok: true,
       message: 'Route private',
-      user
+      user,
+      userEmail,
     };
   }
 
