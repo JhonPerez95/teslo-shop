@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/';
 
@@ -25,8 +27,12 @@ export class AuthController {
   }
 
   @Get()
-  findAll() {
-    return this.authService.findAll();
+    @UseGuards(AuthGuard())
+  testing() {
+    return {
+      ok: true,
+      message: 'Route private'
+    };
   }
 
   @Get(':id')
