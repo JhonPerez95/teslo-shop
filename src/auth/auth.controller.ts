@@ -7,10 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
+import { GetUser } from './decorator/get-user.decorator';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/';
+import { User } from './entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -28,10 +32,16 @@ export class AuthController {
 
   @Get()
     @UseGuards(AuthGuard())
-  testing() {
+  testing(
+    // @Req() request: Request
+    @GetUser() user: User
+  ) {
+
+    // const user= request.user
     return {
       ok: true,
-      message: 'Route private'
+      message: 'Route private',
+      user
     };
   }
 
