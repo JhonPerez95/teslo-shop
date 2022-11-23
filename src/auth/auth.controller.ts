@@ -10,6 +10,7 @@ import {
   Req,
   Header,
   Headers,
+  SetMetadata,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
@@ -19,6 +20,7 @@ import { GetRawHeaders } from './decorator/get-rawHeaders.decorator';
 import { GetUser } from './decorator/get-user.decorator';
 import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/';
 import { User } from './entities/user.entity';
+import { UserRolGuard } from './guards/user-rol.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -34,7 +36,7 @@ export class AuthController {
     return this.authService.login(loginUserDto);
   }
 
-  @Get()
+  @Get('private')
   @UseGuards(AuthGuard())
   testing(
     @Req() request: Request,
@@ -53,18 +55,14 @@ export class AuthController {
     };
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.authService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @Get('private2')
+  @SetMetadata('roles', ['admin', 'super-user', 'user'])
+  @UseGuards(AuthGuard(), UserRolGuard)
+  testing2(@GetUser() user: User) {
+    return {
+      ok: true,
+      message: 'Route private2',
+      user,
+    };
   }
 }
