@@ -3,26 +3,19 @@ import {
   Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   UseGuards,
   Req,
-  Header,
   Headers,
-  SetMetadata,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 import { IncomingHttpHeaders } from 'http';
 import { AuthService } from './auth.service';
-import { GetRawHeaders } from './decorator/get-rawHeaders.decorator';
-import { GetUser } from './decorator/get-user.decorator';
-import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/';
+import { CreateUserDto, LoginUserDto } from './dto/';
 import { User } from './entities/user.entity';
 import { UserRolGuard } from './guards/user-rol.guard';
-import { RoleProtecter } from './decorator/role-protecter.decorator';
 import { ValidRoles } from './entities';
+import { GetRawHeaders, GetUser, RoleProtecter, Auth } from './decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -62,6 +55,16 @@ export class AuthController {
   @RoleProtecter(ValidRoles.SUPER_USER, ValidRoles.ADMIN)
   @UseGuards(AuthGuard(), UserRolGuard)
   testing2(@GetUser() user: User) {
+    return {
+      ok: true,
+      message: 'Route private2',
+      user,
+    };
+  }
+
+  @Get('private3')
+  @Auth(ValidRoles.SUPER_USER)
+  testing3(@GetUser() user: User) {
     return {
       ok: true,
       message: 'Route private2',
