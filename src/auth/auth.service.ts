@@ -47,6 +47,7 @@ export class AuthService {
       select: {
         id: true,
         email: true,
+        fullName: true,
         password: true,
         roles: true,
       },
@@ -59,7 +60,12 @@ export class AuthService {
       throw new UnauthorizedException('Credentials are not valid (password)');
 
     const token = this._generateJWT({ id: userDb.id });
-    return { token };
+    delete userDb.password;
+    return { ...userDb, token };
+  }
+
+  async checkAuthStatus(user: User) {
+    return { ...user, token: this._generateJWT({ id: user.id }) };
   }
 
   // Private
