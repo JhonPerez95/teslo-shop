@@ -45,7 +45,7 @@ export class AuthService {
         email,
       },
       select: {
-        id:true,
+        id: true,
         email: true,
         password: true,
         roles: true,
@@ -58,12 +58,9 @@ export class AuthService {
     if (!bcrypt.compareSync(password, userDb.password))
       throw new UnauthorizedException('Credentials are not valid (password)');
 
-    console.log({userDb})
     const token = this._generateJWT({ id: userDb.id });
     return { token };
   }
-
-
 
   // Private
   private _handleDbErrors(error: any): never {
@@ -75,7 +72,6 @@ export class AuthService {
   }
 
   private _generateJWT(payload: JwtPayloadInterface): string {
-    console.log({payload})
     return this._jwtService.sign(payload);
   }
 }
