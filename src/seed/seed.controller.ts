@@ -1,7 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { SeedService } from './seed.service';
 import { ValidRoles } from '../auth/entities/valid-roles';
-import { Auth } from '../auth/decorator';
+import { Auth, GetUser } from '../auth/decorator';
+import { User } from '../auth/entities/user.entity';
 
 @Controller('seed')
 export class SeedController {
@@ -9,7 +10,7 @@ export class SeedController {
 
   @Get()
   @Auth(ValidRoles.SUPER_USER)
-  executeSeed() {
-    return this.seedService.runSeed();
+  executeSeed(@GetUser() user: User) {
+    return this.seedService.runSeed(user);
   }
 }
