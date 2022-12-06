@@ -1,7 +1,8 @@
+import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductsService } from '../products/products.service';
-import { initialData } from './data/initialData';
+import { initialData, SeedUser } from './data/initialData';
 import { User } from '../auth/entities/user.entity';
 
 @Injectable()
@@ -9,10 +10,27 @@ export class SeedService {
   constructor(
     // @Injectable()
     private readonly _productsService: ProductsService,
+    @InjectRepository(User)
+    private readonly _userRepository: Repository<User>,
   ) {}
-  async runSeed(user: User) {
+  async runSeed() {
+    await this._deleteTables();
+    const user = await this._insertUsers(initialData.users);
     await this._insertNewProduct(user);
     return { statusCode: 200, message: 'Executed successfully!' };
+  }
+
+  private async _deleteTables() {
+    this._productsService.deleteAllProducts();
+    const queryBuilder = this._userRepository.createQueryBuilder();
+    await queryBuilder.delete().where({}).execute();
+  }
+
+  private async _insertUsers(users: SeedUser[]) {
+    const arrUsers = users.map((user) => this._userRepository.create(user));
+
+    const usersDb = await this._userRepository.save(arrUsers);
+    return usersDb[0];
   }
 
   private async _insertNewProduct(user: User) {
@@ -22,7 +40,7 @@ export class SeedService {
       async (product) => await this._productsService.create(product, user),
     );
 
-    await promisesInsertProduct;
+    await Promise.all(promisesInsertProduct);
     return true;
   }
 }
