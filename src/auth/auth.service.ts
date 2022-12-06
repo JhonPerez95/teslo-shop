@@ -2,19 +2,22 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  UnauthorizedException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/';
+import { User } from './entities/user.entity';
+import { JwtPayloadInterface } from './interfaces';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly _userRepository: Repository<User>,
+    private _jwtService: JwtService,
   ) {}
 
   async create(createAuthDto: CreateUserDto) {
@@ -26,26 +29,43 @@ export class AuthService {
         password: bcrypt.hashSync(password, 10),
       });
       await this._userRepository.save(userDb);
-      return userDb;
+      delete userDb.password;
+      const token = this._generateJWT({ id: userDb.id });
+
+      return { userDb, token };
     } catch (error) {
       this._handleDbErrors(error);
     }
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async login(loginUserDto: LoginUserDto) {
+    const { email, password } = loginUserDto;
+    const userDb = await this._userRepository.findOne({
+      where: {
+        email,
+      },
+      select: {
+        id: true,
+        email: true,
+        fullName: true,
+        password: true,
+        roles: true,
+      },
+    });
+
+    if (!userDb)
+      throw new UnauthorizedException('Credentials are not valid (email)');
+
+    if (!bcrypt.compareSync(password, userDb.password))
+      throw new UnauthorizedException('Credentials are not valid (password)');
+
+    const token = this._generateJWT({ id: userDb.id });
+    delete userDb.password;
+    return { ...userDb, token };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateUserDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async checkAuthStatus(user: User) {
+    return { ...user, token: this._generateJWT({ id: user.id }) };
   }
 
   // Private
@@ -53,8 +73,11 @@ export class AuthService {
     if (error.code === '23505') {
       throw new BadRequestException(error.detail);
     }
-
     console.log(error);
     throw new InternalServerErrorException('Comunication with the admin!');
+  }
+
+  private _generateJWT(payload: JwtPayloadInterface): string {
+    return this._jwtService.sign(payload);
   }
 }
