@@ -13,13 +13,15 @@ import { ProductsService } from './products.service';
 import { CreateProductDto, UpdateProductDto } from './dto/';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { Auth } from '../auth/decorator';
+import { ValidRoles } from '../auth/entities';
 
 @Controller('products')
-  @Auth()
+@Auth()
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
+  @Auth(ValidRoles.ADMIN)
   create(@Body() createProductDto: CreateProductDto) {
     return this.productsService.create(createProductDto);
   }
