@@ -16,22 +16,50 @@ import { User } from './entities/user.entity';
 import { UserRolGuard } from './guards/user-rol.guard';
 import { ValidRoles } from './entities';
 import { GetRawHeaders, GetUser, RoleProtecter, Auth } from './decorator';
+import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Auth')
+@ApiResponse({
+  status: 400,
+  description: 'Bad Request',
+})
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
+  @ApiCreatedResponse({
+    description: 'The record has been successfully created.',
+    type: User,
+  })
   create(@Body() createUserDto: CreateUserDto) {
     return this.authService.create(createUserDto);
   }
 
   @Post('login')
+  @ApiResponse({
+    status: 200,
+    description: 'The user is LOGIN',
+    type: User,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Credentials are not valid',
+  })
   login(@Body() loginUserDto: LoginUserDto) {
     return this.authService.login(loginUserDto);
   }
 
   @Get('checkAuth')
+  @ApiResponse({
+    status: 200,
+    description: 'The user is LOGIN',
+    type: User,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Credentials are not valid',
+  })
   @Auth(ValidRoles.USER)
   checkAuthStatus(@GetUser() user: User) {
     return this.authService.checkAuthStatus(user);
