@@ -47,7 +47,7 @@ export class FilesController {
   )
   async uploadProductImage(@UploadedFile() file: Express.Multer.File) {
     const image = await this.filesService.uploadProductImage(file)
-
+    const test
     const secureUrl = `${this.configService.get('HOST_API')}/static/products/${
       image.filename
     }`
