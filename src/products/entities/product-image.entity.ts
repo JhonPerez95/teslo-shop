@@ -14,5 +14,5 @@ export class ProductImage {
   })
   product: Product
 
-  a
+  aasda
 }
