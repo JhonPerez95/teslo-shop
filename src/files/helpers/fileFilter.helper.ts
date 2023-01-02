@@ -12,5 +12,6 @@ export const fileFilter = (
   if (!validExtension.includes(fileExtension))
     return callback(new Error('Extension not allowed'), false)
 
+  const runTes
   callback(null, true)
 }
