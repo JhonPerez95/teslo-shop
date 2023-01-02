@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { Product } from './product.entity'
-
+const hola = 'hola'
 @Entity({ name: 'productImages' })
 export class ProductImage {
   @PrimaryGeneratedColumn()
@@ -13,6 +13,4 @@ export class ProductImage {
     onDelete: 'CASCADE',
   })
   product: Product
-
-  aasda
 }
