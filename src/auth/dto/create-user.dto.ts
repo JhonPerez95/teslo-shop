@@ -1,11 +1,11 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger'
 import {
   IsEmail,
   IsString,
   Matches,
   MaxLength,
   MinLength,
-} from 'class-validator';
+} from 'class-validator'
 
 export class CreateUserDto {
   @ApiProperty({
@@ -14,7 +14,7 @@ export class CreateUserDto {
   })
   @IsString()
   @IsEmail()
-  email: string;
+  email: string
 
   @ApiProperty({
     description: 'Password of the user',
@@ -30,7 +30,7 @@ export class CreateUserDto {
     message:
       'The password must have a Uppercase, lowercase letter and a number',
   })
-  password: string;
+  password: string
 
   @ApiProperty({
     description: 'Full name of the user',
@@ -38,5 +38,5 @@ export class CreateUserDto {
   })
   @IsString()
   @MinLength(1)
-  fullName: string;
+  fullName: string
 }

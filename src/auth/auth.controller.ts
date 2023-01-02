@@ -6,17 +6,17 @@ import {
   UseGuards,
   Req,
   Headers,
-} from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
-import { IncomingHttpHeaders } from 'http';
-import { AuthService } from './auth.service';
-import { CreateUserDto, LoginUserDto } from './dto/';
-import { User } from './entities/user.entity';
-import { UserRolGuard } from './guards/user-rol.guard';
-import { ValidRoles } from './entities';
-import { GetRawHeaders, GetUser, RoleProtecter, Auth } from './decorator';
-import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+} from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
+import { Request } from 'express'
+import { IncomingHttpHeaders } from 'http'
+import { AuthService } from './auth.service'
+import { CreateUserDto, LoginUserDto } from './dto/'
+import { User } from './entities/user.entity'
+import { UserRolGuard } from './guards/user-rol.guard'
+import { ValidRoles } from './entities'
+import { GetRawHeaders, GetUser, RoleProtecter, Auth } from './decorator'
+import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger'
 
 @ApiTags('Auth')
 @ApiResponse({
@@ -33,7 +33,7 @@ export class AuthController {
     type: User,
   })
   create(@Body() createUserDto: CreateUserDto) {
-    return this.authService.create(createUserDto);
+    return this.authService.create(createUserDto)
   }
 
   @Post('login')
@@ -47,7 +47,7 @@ export class AuthController {
     description: 'Credentials are not valid',
   })
   login(@Body() loginUserDto: LoginUserDto) {
-    return this.authService.login(loginUserDto);
+    return this.authService.login(loginUserDto)
   }
 
   @Get('checkAuth')
@@ -62,7 +62,7 @@ export class AuthController {
   })
   @Auth(ValidRoles.USER)
   checkAuthStatus(@GetUser() user: User) {
-    return this.authService.checkAuthStatus(user);
+    return this.authService.checkAuthStatus(user)
   }
 
   @Get('private')
@@ -81,7 +81,7 @@ export class AuthController {
       userEmail,
       rawHeaders,
       headers,
-    };
+    }
   }
 
   @Get('private2')
@@ -93,7 +93,7 @@ export class AuthController {
       ok: true,
       message: 'Route private2',
       user,
-    };
+    }
   }
 
   @Get('private3')
@@ -103,6 +103,6 @@ export class AuthController {
       ok: true,
       message: 'Route private2',
       user,
-    };
+    }
   }
 }

@@ -7,54 +7,54 @@ import {
   IsPositive,
   IsString,
   MinLength,
-} from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+} from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
 
 export class CreateProductDto {
   @ApiProperty()
   @IsString()
   @MinLength(1)
-  title: string;
+  title: string
 
   @ApiProperty()
   @IsNumber()
   @IsPositive()
   @IsOptional()
-  price?: number;
+  price?: number
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  description?: string;
+  description?: string
 
   @ApiProperty()
   @IsString()
   @IsOptional()
-  slug?: string;
+  slug?: string
 
   @ApiProperty()
   @IsInt()
   @IsPositive()
   @IsOptional()
-  stock?: number;
+  stock?: number
 
   @ApiProperty()
   @IsString({ each: true })
   @IsArray()
-  sizes: string[];
+  sizes: string[]
 
   @ApiProperty()
   @IsIn(['men', 'women', 'kid', 'unisex'])
-  gender: string;
+  gender: string
 
   @ApiProperty()
   @IsString({ each: true })
   @IsArray()
-  tags: string[];
+  tags: string[]
 
   @ApiProperty()
   @IsString({ each: true })
   @IsArray()
   @IsOptional()
-  images?: string[];
+  images?: string[]
 }
