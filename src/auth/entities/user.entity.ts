@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger'
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -6,8 +6,8 @@ import {
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { Product } from '../../products/entities/product.entity';
+} from 'typeorm'
+import { Product } from '../../products/entities/product.entity'
 
 @Entity('users')
 export class User {
@@ -16,7 +16,7 @@ export class User {
     example: 'e5ea1e8a-d07f-4342-84ac-49180c7e2c4d',
   })
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id: string
 
   @ApiProperty({
     description: 'Email of the user',
@@ -27,7 +27,7 @@ export class User {
     type: 'text',
     unique: true,
   })
-  email: string;
+  email: string
 
   @ApiProperty({
     description: 'Password of the user',
@@ -38,7 +38,7 @@ export class User {
     type: 'text',
     select: false,
   })
-  password: string;
+  password: string
 
   @ApiProperty({
     description: 'Full name of the user',
@@ -47,7 +47,7 @@ export class User {
   @Column({
     type: 'text',
   })
-  fullName: string;
+  fullName: string
 
   @ApiProperty({
     description: 'Is active of the user',
@@ -59,7 +59,7 @@ export class User {
     type: 'bool',
     default: true,
   })
-  isActive: boolean;
+  isActive: boolean
 
   @ApiProperty({
     description: 'Roles of the user',
@@ -72,19 +72,19 @@ export class User {
     array: true,
     default: ['user'],
   })
-  roles: string[];
+  roles: string[]
 
   // create relation whith products
   @OneToMany(() => Product, (product) => product.user)
-  product: Product;
+  product: Product
 
   @BeforeInsert()
   checkFieldsBeforeInsert() {
-    this.email = this.email.toLocaleLowerCase();
+    this.email = this.email.toLocaleLowerCase()
   }
 
   @BeforeUpdate()
   checkFieldsBeforeUpdate() {
-    this.checkFieldsBeforeInsert();
+    this.checkFieldsBeforeInsert()
   }
 }

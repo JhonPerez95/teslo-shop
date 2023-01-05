@@ -3,14 +3,14 @@ import {
   Injectable,
   InternalServerErrorException,
   UnauthorizedException,
-} from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/';
-import { User } from './entities/user.entity';
-import { JwtPayloadInterface } from './interfaces';
+} from '@nestjs/common'
+import * as bcrypt from 'bcrypt'
+import { Repository } from 'typeorm'
+import { InjectRepository } from '@nestjs/typeorm'
+import { JwtService } from '@nestjs/jwt'
+import { CreateUserDto, LoginUserDto, UpdateUserDto } from './dto/'
+import { User } from './entities/user.entity'
+import { JwtPayloadInterface } from './interfaces'
 
 @Injectable()
 export class AuthService {
@@ -22,24 +22,24 @@ export class AuthService {
 
   async create(createAuthDto: CreateUserDto) {
     try {
-      const { password, ...resUserDto } = createAuthDto;
+      const { password, ...resUserDto } = createAuthDto
 
       const userDb = this._userRepository.create({
         ...resUserDto,
         password: bcrypt.hashSync(password, 10),
-      });
-      await this._userRepository.save(userDb);
-      delete userDb.password;
-      const token = this._generateJWT({ id: userDb.id });
+      })
+      await this._userRepository.save(userDb)
+      delete userDb.password
+      const token = this._generateJWT({ id: userDb.id })
 
-      return { userDb, token };
+      return { userDb, token }
     } catch (error) {
-      this._handleDbErrors(error);
+      this._handleDbErrors(error)
     }
   }
 
   async login(loginUserDto: LoginUserDto) {
-    const { email, password } = loginUserDto;
+    const { email, password } = loginUserDto
     const userDb = await this._userRepository.findOne({
       where: {
         email,
@@ -51,33 +51,33 @@ export class AuthService {
         password: true,
         roles: true,
       },
-    });
+    })
 
     if (!userDb)
-      throw new UnauthorizedException('Credentials are not valid (email)');
+      throw new UnauthorizedException('Credentials are not valid (email)')
 
     if (!bcrypt.compareSync(password, userDb.password))
-      throw new UnauthorizedException('Credentials are not valid (password)');
+      throw new UnauthorizedException('Credentials are not valid (password)')
 
-    const token = this._generateJWT({ id: userDb.id });
-    delete userDb.password;
-    return { ...userDb, token };
+    const token = this._generateJWT({ id: userDb.id })
+    delete userDb.password
+    return { ...userDb, token }
   }
 
   async checkAuthStatus(user: User) {
-    return { ...user, token: this._generateJWT({ id: user.id }) };
+    return { ...user, token: this._generateJWT({ id: user.id }) }
   }
 
   // Private
   private _handleDbErrors(error: any): never {
     if (error.code === '23505') {
-      throw new BadRequestException(error.detail);
+      throw new BadRequestException(error.detail)
     }
-    console.log(error);
-    throw new InternalServerErrorException('Comunication with the admin!');
+    console.log(error)
+    throw new InternalServerErrorException('Comunication with the admin!')
   }
 
   private _generateJWT(payload: JwtPayloadInterface): string {
-    return this._jwtService.sign(payload);
+    return this._jwtService.sign(payload)
   }
 }

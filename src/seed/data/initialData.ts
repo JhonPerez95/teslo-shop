@@ -1,27 +1,27 @@
 interface SeedProduct {
-  description: string;
-  images: string[];
-  stock: number;
-  price: number;
-  sizes: ValidSizes[];
-  slug: string;
-  tags: string[];
-  title: string;
-  type: ValidTypes;
-  gender: 'men' | 'women' | 'kid' | 'unisex';
+  description: string
+  images: string[]
+  stock: number
+  price: number
+  sizes: ValidSizes[]
+  slug: string
+  tags: string[]
+  title: string
+  type: ValidTypes
+  gender: 'men' | 'women' | 'kid' | 'unisex'
 }
 export interface SeedUser {
-  email: string;
-  fullName: string;
-  password: string;
-  roles?: string[];
+  email: string
+  fullName: string
+  password: string
+  roles?: string[]
 }
-type ValidSizes = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL';
-type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats';
+type ValidSizes = 'XS' | 'S' | 'M' | 'L' | 'XL' | 'XXL' | 'XXXL'
+type ValidTypes = 'shirts' | 'pants' | 'hoodies' | 'hats'
 
 interface SeedData {
-  users: SeedUser[];
-  products: SeedProduct[];
+  users: SeedUser[]
+  products: SeedProduct[]
 }
 
 export const initialData: SeedData = {
@@ -719,4 +719,4 @@ export const initialData: SeedData = {
       gender: 'kid',
     },
   ],
-};
+}

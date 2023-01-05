@@ -8,19 +8,19 @@ import {
   Delete,
   ParseUUIDPipe,
   Query,
-} from '@nestjs/common';
+} from '@nestjs/common'
 import {
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiResponse,
   ApiTags,
-} from '@nestjs/swagger';
-import { ProductsService } from './products.service';
-import { CreateProductDto, UpdateProductDto } from './dto/';
-import { PaginationDto } from 'src/common/dtos/pagination.dto';
-import { Auth, GetUser } from '../auth/decorator';
-import { User, ValidRoles } from '../auth/entities';
-import { Product } from './entities/product.entity';
+} from '@nestjs/swagger'
+import { ProductsService } from './products.service'
+import { CreateProductDto, UpdateProductDto } from './dto/'
+import { PaginationDto } from 'src/common/dtos/pagination.dto'
+import { Auth, GetUser } from '../auth/decorator'
+import { User, ValidRoles } from '../auth/entities'
+import { Product } from './entities/product.entity'
 
 @ApiTags('Products')
 @ApiForbiddenResponse({ description: 'Forbidden.' })
@@ -40,7 +40,7 @@ export class ProductsController {
   })
   @Auth(ValidRoles.USER)
   create(@Body() createProductDto: CreateProductDto, @GetUser() user: User) {
-    return this.productsService.create(createProductDto, user);
+    return this.productsService.create(createProductDto, user)
   }
 
   @ApiResponse({
@@ -50,7 +50,7 @@ export class ProductsController {
   })
   @Get()
   findAll(@Query() paginationDto: PaginationDto) {
-    return this.productsService.findAll(paginationDto);
+    return this.productsService.findAll(paginationDto)
   }
 
   @ApiResponse({
@@ -60,7 +60,7 @@ export class ProductsController {
   })
   @Get(':term')
   findOne(@Param('term') term: string) {
-    return this.productsService.findOnePlain(term);
+    return this.productsService.findOnePlain(term)
   }
 
   @ApiResponse({
@@ -78,7 +78,7 @@ export class ProductsController {
     @Body() updateProductDto: UpdateProductDto,
     @GetUser() user: User,
   ) {
-    return this.productsService.update(id, updateProductDto, user);
+    return this.productsService.update(id, updateProductDto, user)
   }
 
   @Delete(':id')
@@ -91,6 +91,6 @@ export class ProductsController {
     description: 'The Product no found',
   })
   remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.productsService.remove(id);
+    return this.productsService.remove(id)
   }
 }

@@ -6,7 +6,10 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint/eslint-plugin'],
-  extends: [],
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:prettier/recommended',
+  ],
   root: true,
   env: {
     node: true,
@@ -18,5 +21,20 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    'no-console': 'warn',
+    'new-cap': 'off',
+    'require-jsdoc': 'off',
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    // '@typescript-eslint/naming-convention': [
+    //   'error',
+
+    //   {
+    //     selector: 'memberLike',
+    //     modifiers: ['private'],
+    //     format: ['camelCase'],
+    //     leadingUnderscore: 'require',
+    //   },
+    // ],
   },
-};
+}

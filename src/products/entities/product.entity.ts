@@ -1,5 +1,5 @@
-import { ProductImage } from './product-image.entity';
-import { User } from '../../auth/entities/user.entity';
+import { ProductImage } from './product-image.entity'
+import { User } from '../../auth/entities/user.entity'
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -8,8 +8,8 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-} from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
+} from 'typeorm'
+import { ApiProperty } from '@nestjs/swagger'
 
 @Entity({ name: 'products' })
 export class Product {
@@ -19,7 +19,7 @@ export class Product {
     uniqueItems: true,
   })
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  id: string
 
   @ApiProperty({
     description: 'The title of the product',
@@ -28,7 +28,7 @@ export class Product {
   @Column('text', {
     unique: true,
   })
-  title: string;
+  title: string
 
   @ApiProperty({
     description: 'The price of the product',
@@ -37,7 +37,7 @@ export class Product {
   @Column('float', {
     default: 0,
   })
-  price: number;
+  price: number
 
   @ApiProperty({
     description: 'The description of the product',
@@ -49,7 +49,7 @@ export class Product {
     type: 'text',
     nullable: true,
   })
-  description: string;
+  description: string
 
   @ApiProperty({
     description: 'The slug of the product',
@@ -60,7 +60,7 @@ export class Product {
     unique: true,
     type: 'text',
   })
-  slug: string;
+  slug: string
 
   @ApiProperty({
     description: 'The stock of the product',
@@ -68,21 +68,21 @@ export class Product {
     default: 0,
   })
   @Column({ type: 'int', default: 0 })
-  stock: number;
+  stock: number
 
   @ApiProperty({
     description: 'The sizes of the product',
     example: ['S', 'M', 'L', 'XL', 'XXL'],
   })
   @Column({ type: 'text', array: true })
-  sizes: string[];
+  sizes: string[]
 
   @ApiProperty({
     description: 'The gender of the product',
     example: 'men',
   })
   @Column({ type: 'text' })
-  gender: string;
+  gender: string
 
   @ApiProperty({
     description: 'The tags of the product',
@@ -93,7 +93,7 @@ export class Product {
     array: true,
     default: [],
   })
-  tags: string[];
+  tags: string[]
 
   @ApiProperty({
     description: 'The images of the product',
@@ -104,26 +104,26 @@ export class Product {
     cascade: true,
     eager: true,
   })
-  images?: ProductImage[];
+  images?: ProductImage[]
 
   @ManyToOne(() => User, (user) => user.product, { eager: true })
-  user: User;
+  user: User
 
   // Validations
   @BeforeInsert()
   checkSlugInsert() {
     if (!this.slug) {
-      this.slug = this.title;
+      this.slug = this.title
     }
-    this.slug = this.slug.toLowerCase().replace(' ', '_').replace("'", '');
+    this.slug = this.slug.toLowerCase().replace(' ', '_').replace("'", '')
   }
 
   @BeforeUpdate()
   checkSlugUpdate() {
     if (!this.slug) {
-      this.slug = this.title;
+      this.slug = this.title
     }
-    this.slug = this.slug.toLowerCase().replace(' ', '_').replace("'", '');
-    this.title = this.title.toLowerCase().replace(' ', '_').replace("'", '');
+    this.slug = this.slug.toLowerCase().replace(' ', '_').replace("'", '')
+    this.title = this.title.toLowerCase().replace(' ', '_').replace("'", '')
   }
 }

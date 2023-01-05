@@ -1,13 +1,13 @@
-import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule } from '@nestjs/jwt';
+import { Module } from '@nestjs/common'
+import { AuthService } from './auth.service'
+import { AuthController } from './auth.controller'
+import { TypeOrmModule } from '@nestjs/typeorm'
+import { JwtModule } from '@nestjs/jwt'
 
-import { User } from './entities/user.entity';
-import { PassportModule } from '@nestjs/passport';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { JwtStrategy } from './strategies/jwt.strategy';
+import { User } from './entities/user.entity'
+import { PassportModule } from '@nestjs/passport'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { JwtStrategy } from './strategies/jwt.strategy'
 @Module({
   controllers: [AuthController],
   exports: [TypeOrmModule, JwtStrategy, PassportModule, JwtModule],
@@ -25,7 +25,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
           signOptions: {
             expiresIn: configService.get('JWT_EXPIRE'),
           },
-        };
+        }
       },
     }),
     // JwtModule.register({

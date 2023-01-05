@@ -1,18 +1,16 @@
-import { Request } from 'express';
+import { Request } from 'express'
 
 export const fileFilter = (
   req: Request,
   file: Express.Multer.File,
-  callback: Function,
+  callback: (arg1: Error, arg2: boolean) => void,
 ): void => {
+  if (!file) return callback(new Error('File is empty'), false)
 
-
-  if (!file) return callback(new Error('File is empty'), false);
-
-  const fileExtension = file.mimetype.split('/').pop();
-  const validExtension = ['jpg', 'png', 'gif', 'jpeg'];
+  const fileExtension = file.mimetype.split('/').pop()
+  const validExtension = ['jpg', 'png', 'gif', 'jpeg']
   if (!validExtension.includes(fileExtension))
-    return callback(new Error('Extension not allowed'), false);
+    return callback(new Error('Extension not allowed'), false)
 
-  callback(null, true);
-};
+  callback(null, true)
+}
