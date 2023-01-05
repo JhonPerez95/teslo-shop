@@ -25,12 +25,11 @@ export class MessagesWsGateway
     const token = client.handshake.headers.authorization
     try {
       const payload = await this.jwtService.verify(token)
-      console.log(payload)
+      await this.messagesWsService.registerClient(client, payload.id)
     } catch (error) {
       client.disconnect()
       return
     }
-    this.messagesWsService.registerClient(client)
 
     this.wss.emit(
       'clients-updated',
@@ -48,6 +47,8 @@ export class MessagesWsGateway
 
   @SubscribeMessage('message-client')
   handleMessageClient(client: Socket, payload: any): void {
+    const fullName = this.messagesWsService.getFullNameUser(client.id)
+    console.log({ fullName })
     //! Emite el mensaje unicamente al cliente que lo envia
     // client.emit('message-server', {
     //   message: payload.message + ' (from server)',
@@ -62,8 +63,8 @@ export class MessagesWsGateway
 
     // ! Emite el mensaje a todos los clientess
     this.wss.emit('message-server', {
-      message: payload.message + ' (from server)',
-      fullName: client.id,
+      message: payload.message,
+      fullName,
     })
   }
 }
