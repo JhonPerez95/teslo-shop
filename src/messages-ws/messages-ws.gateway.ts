@@ -48,7 +48,7 @@ export class MessagesWsGateway
   @SubscribeMessage('message-client')
   handleMessageClient(client: Socket, payload: any): void {
     const fullName = this.messagesWsService.getFullNameUser(client.id)
-    console.log({ fullName })
+
     //! Emite el mensaje unicamente al cliente que lo envia
     // client.emit('message-server', {
     //   message: payload.message + ' (from server)',
